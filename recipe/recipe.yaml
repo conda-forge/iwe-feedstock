@@ -22,22 +22,26 @@ build:
           - cargo auditable install --locked --no-track --bins --root="$PREFIX" --path=./crates/iwec
           - cargo auditable install --locked --no-track --bins --root="$PREFIX" --path=./crates/iwes
           # generate shell completions
-          - mkdir -p "$PREFIX"/share/bash-completion/completions "$PREFIX"/share/fish/vendor_completions.d "$PREFIX"/share/zsh/site-functions
-          - '"$PREFIX"/bin/iwe completions bash > "$PREFIX"/share/bash-completion/completions/iwe'
-          - '"$PREFIX"/bin/iwe completions fish > "$PREFIX"/share/fish/vendor_completions.d/iwe.fish'
-          - '"$PREFIX"/bin/iwe completions zsh  > "$PREFIX"/share/zsh/site-functions/_iwe'
+          - if: build_platform == host_platform
+            then:
+              - mkdir -p "$PREFIX"/share/bash-completion/completions "$PREFIX"/share/fish/vendor_completions.d "$PREFIX"/share/zsh/site-functions
+              - '"$PREFIX"/bin/iwe completions bash > "$PREFIX"/share/bash-completion/completions/iwe'
+              - '"$PREFIX"/bin/iwe completions fish > "$PREFIX"/share/fish/vendor_completions.d/iwe.fish'
+              - '"$PREFIX"/bin/iwe completions zsh  > "$PREFIX"/share/zsh/site-functions/_iwe'
       - if: win
         then:
           - cargo auditable install --locked --no-track --bins --root="%LIBRARY_PREFIX%" --path=./crates/iwe
           - cargo auditable install --locked --no-track --bins --root="%LIBRARY_PREFIX%" --path=./crates/iwec
           - cargo auditable install --locked --no-track --bins --root="%LIBRARY_PREFIX%" --path=./crates/iwes
           # generate shell completions
-          - mkdir "%LIBRARY_PREFIX%"\share\bash-completion\completions
-          - mkdir "%LIBRARY_PREFIX%"\share\fish\vendor_completions.d
-          - mkdir "%LIBRARY_PREFIX%"\share\zsh\site-functions
-          - '"%LIBRARY_BIN%"\iwe.exe completions bash > "%LIBRARY_PREFIX%"\share\bash-completion\completions\iwe'
-          - '"%LIBRARY_BIN%"\iwe.exe completions fish > "%LIBRARY_PREFIX%"\share\fish\vendor_completions.d\iwe.fish'
-          - '"%LIBRARY_BIN%"\iwe.exe completions zsh  > "%LIBRARY_PREFIX%"\share\zsh\site-functions\_iwe'
+          - if: build_platform == host_platform
+            then:
+              - mkdir "%LIBRARY_PREFIX%"\share\bash-completion\completions
+              - mkdir "%LIBRARY_PREFIX%"\share\fish\vendor_completions.d
+              - mkdir "%LIBRARY_PREFIX%"\share\zsh\site-functions
+              - '"%LIBRARY_BIN%"\iwe.exe completions bash > "%LIBRARY_PREFIX%"\share\bash-completion\completions\iwe'
+              - '"%LIBRARY_BIN%"\iwe.exe completions fish > "%LIBRARY_PREFIX%"\share\fish\vendor_completions.d\iwe.fish'
+              - '"%LIBRARY_BIN%"\iwe.exe completions zsh  > "%LIBRARY_PREFIX%"\share\zsh\site-functions\_iwe'
       - cargo-bundle-licenses --format=yaml --output=./THIRDPARTY.yml
 
 requirements:
@@ -50,20 +54,22 @@ requirements:
 
 tests:
   - script:
-      - iwe --help
-      - iwe --version
+      - if: build_platform == host_platform
+        then:
+          - iwe --help
+          - iwe --version
   - package_contents:
       bin:
         - iwe
         - iwec
         - iwes
       files:
-        - if: unix
+        - if: unix and build_platform == host_platform
           then:
             - share/bash-completion/completions/iwe
             - share/fish/vendor_completions.d/iwe.fish
             - share/zsh/site-functions/_iwe
-        - if: win
+        - if: win and build_platform == host_platform
           then:
             - Library/share/bash-completion/completions/iwe
             - Library/share/fish/vendor_completions.d/iwe.fish
