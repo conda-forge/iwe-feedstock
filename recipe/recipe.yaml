@@ -1,5 +1,5 @@
 context:
-  version: "0.1.5"
+  version: "0.1.6"
 
 package:
   name: iwe
@@ -7,10 +7,10 @@ package:
 
 source:
   url: https://github.com/iwe-org/iwe/archive/refs/tags/iwe-v${{ version }}.tar.gz
-  sha256: be37bb29eb59fdd9bd93f53dc7562f69af1da697f208e2340bfaa2833859a4ba
+  sha256: 762d976e50cf6ad2749b2a64d26a5b76f0c9d96b7bad08e21b784220bdb5217a
 
 build:
-  number: 1
+  number: 0
   script:
     env:
       CARGO_PROFILE_RELEASE_LTO: fat
