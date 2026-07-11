@@ -1,5 +1,5 @@
 context:
-  version: "0.10.0"
+  version: "0.11.0"
 
 package:
   name: iwe
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/iwe-org/iwe/archive/refs/tags/iwe-v${{ version }}.tar.gz
-  sha256: 1b178c31c2a4a55c7b76e954d18ec41d4d66afcfec7ccd455a9cb93adef37708
+  sha256: c1cfd54b16959e9e64a013cf71bb5d7de3511986bdbb228ed2a02878502ec776
 
 build:
   number: 0
