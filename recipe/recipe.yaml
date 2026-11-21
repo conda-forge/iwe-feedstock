@@ -18,6 +18,9 @@ build:
     interpreter: nu
     content:
       - let prefix = $env.LIBRARY_PREFIX? | default $env.PREFIX
+      # keep rustc's command line below the 32767-char CreateProcess limit
+      - if: win
+        then: $env.CARGO_BUILD_BUILD_DIR = 'C:\.cb'
       # build main app and generate license data
       - cargo auditable install --path=crates/iwe  --root=($prefix) --no-track --locked --bins
       - cargo auditable install --path=crates/iwec --root=($prefix) --no-track --locked --bins
